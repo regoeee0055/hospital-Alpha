@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ลงทะเบียนผู้ป่วย</title>
+
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/register_dark.css' %}">
+</head>
+
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="title">
+      <div style="font-size:26px">🧾</div>
+      <div>
+        <h1>ลงทะเบียนผู้ป่วย</h1>
+        <div class="subtitle">เพิ่มผู้ป่วยใหม่เพื่อสร้าง Visit/Queue ต่อได้</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a class="btn" href="/">📋 กลับหน้าคิว</a>
+      <a class="btn" href="/accounts/dashboard/">📊 Dashboard</a>
+    </div>
+  </div>
+
+  <div class="card">
+    {# ถ้า view ส่ง error มาให้แสดง #}
+    {% if error %}
+      <div class="alert">❌ {{ error }}</div>
+    {% endif %}
+
+    <form method="post" autocomplete="off">
+      {% csrf_token %}
+
+      <div class="grid">
+        <div class="field">
+          <label for="first_name">ชื่อ</label>
+          <input id="first_name" name="first_name" required placeholder="เช่น สมชาย"
+                 value="{{ first_name|default:'' }}">
+        </div>
+
+        <div class="field">
+          <label for="last_name">นามสกุล</label>
+          <input id="last_name" name="last_name" required placeholder="เช่น ใจดี"
+                 value="{{ last_name|default:'' }}">
+        </div>
+
+        <div class="field" style="grid-column: span 2;">
+          <label for="national_id">เลขบัตรประชาชน</label>
+          <input id="national_id" name="national_id" required inputmode="numeric"
+                 placeholder="13 หลัก (ไม่ต้องใส่ขีด) เช่น 1101700234567"
+                 value="{{ national_id|default:'' }}">
+          <div class="hint">
+            • แนะนำ: ตรวจซ้ำไม่ให้ลงทะเบียนซ้ำ <br>
+            • ถ้าจะทำเดโม: ใส่เลขสุ่ม 13 หลักได้ (แต่ควรกันซ้ำใน backend)
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <button class="btn primary" type="submit">✅ บันทึกผู้ป่วย</button>
+        <a class="btn ghost" href="/">ยกเลิก</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  // auto-format เบา ๆ: ตัดช่องว่าง
+  const nid = document.getElementById("national_id");
+  if(nid){
+    nid.addEventListener("input", () => {
+      nid.value = nid.value.replace(/\s+/g, "");
+    });
+  }
+</script>
+
+</body>
+</html>
